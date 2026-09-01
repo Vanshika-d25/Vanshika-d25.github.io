@@ -1,48 +1,8 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight, Github, Linkedin } from 'lucide-react'
 import { profile } from '@/data/profile'
-import { highlightCode } from '@/lib/highlight'
-
-type TLine =
-  | { type: 'cmd'; text: string }
-  | { type: 'blank' }
-  | { type: 'code'; text: string }
-  | { type: 'out'; text: string; ok?: boolean }
-
-const terminalLines: TLine[] = [
-  { type: 'cmd', text: 'cat profile.config.ts' },
-  { type: 'blank' },
-  { type: 'code', text: 'const engineer = {' },
-  { type: 'code', text: '  name: "Vanshika Dixit",' },
-  { type: 'code', text: '  role: "AI Engineer",' },
-  { type: 'code', text: '  focus: ["LLM Eval", "AI Agents", "Benchmarking"],' },
-  { type: 'code', text: '  current: "Turing · ComputerBench",' },
-  { type: 'code', text: '  shipping: true,' },
-  { type: 'code', text: '}' },
-  { type: 'blank' },
-  { type: 'out', text: '✓ verifiers passed · benchmark reproducible', ok: true },
-]
-
-function renderLine(line: TLine, index: number) {
-  switch (line.type) {
-    case 'cmd':
-      return (
-        <div className="text-zinc-300">
-          <span className="text-accent-400">$</span> {line.text}
-        </div>
-      )
-    case 'blank':
-      return <div className="h-3" />
-    case 'code':
-      return <div className="text-zinc-300">{highlightCode(line.text, index)}</div>
-    case 'out':
-      return <div className="text-accent-300">{line.text}</div>
-  }
-}
 
 export function Hero() {
-  const reduce = useReducedMotion()
-
   return (
     <section
       id="home"
@@ -107,44 +67,6 @@ export function Hero() {
               <Linkedin className="h-4 w-4" />
               LinkedIn
             </a>
-          </motion.div>
-        </div>
-
-        {/* right: terminal */}
-        <div className="lg:col-span-5">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            className="card overflow-hidden p-0 shadow-card"
-          >
-            <div className="flex items-center gap-2 border-b border-ink-700/70 bg-ink-850/80 px-4 py-3">
-              <span className="h-3 w-3 rounded-full bg-[#ff5f56]/80" />
-              <span className="h-3 w-3 rounded-full bg-[#ffbd2e]/80" />
-              <span className="h-3 w-3 rounded-full bg-[#27c93f]/80" />
-              <span className="ml-2 font-mono text-xs text-zinc-500">profile.config.ts</span>
-            </div>
-            <div className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed no-scrollbar">
-              {terminalLines.map((line, i) => (
-                <motion.div
-                  key={i}
-                  initial={reduce ? false : { opacity: 0 }}
-                  animate={reduce ? undefined : { opacity: 1 }}
-                  transition={{ duration: 0.35, delay: 0.4 + i * 0.08, ease: 'easeOut' }}
-                >
-                  {renderLine(line, i)}
-                </motion.div>
-              ))}
-              <motion.div
-                initial={reduce ? false : { opacity: 0 }}
-                animate={reduce ? undefined : { opacity: 1 }}
-                transition={{ delay: 0.4 + terminalLines.length * 0.08 }}
-                className="mt-1 flex items-center gap-1 text-zinc-500"
-              >
-                <span className="text-accent-400">$</span>
-                <span className="inline-block h-4 w-2 animate-blink bg-accent-400/80" />
-              </motion.div>
-            </div>
           </motion.div>
         </div>
       </div>
